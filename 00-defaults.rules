@@ -1,0 +1,52 @@
+# /etc/pudo/rules.d/00-defaults.rules
+# pudo — Default rules
+#
+# ─── FORMAT ──────────────────────────────────────────────────────────────────
+#
+#   WHO   HOST=(TARGET_USER[:TARGET_GROUP])   [OPTIONS]   COMMANDS
+#
+# WHO:
+#   username       — a single user
+#   %groupname     — all members of that group
+#   ALL            — everyone
+#
+# HOST:
+#   ALL            — every hostname
+#   myhostname     — only that machine
+#
+# TARGET_USER[:TARGET_GROUP]:
+#   root           — become root
+#   ALL            — any user
+#   alice:docker   — become alice with primary group docker
+#
+# OPTIONS (space-separated):
+#   NOPASSWD       — skip password prompt
+#   CAPS=c1,c2     — restrict to only these capabilities (no full root)
+#
+# COMMANDS:
+#   ALL                    — any command
+#   /usr/bin/systemctl     — exact absolute path
+#   systemctl              — basename match against PATH
+#
+# ─── DEFAULTS ────────────────────────────────────────────────────────────────
+
+# wheel group — full root access (standard Arch/Fedora convention)
+%wheel  ALL=(ALL:ALL)  ALL
+
+# sudo group — full root access (standard Debian/Ubuntu convention)
+%sudo   ALL=(ALL:ALL)  ALL
+
+# ─── EXAMPLES (uncomment to enable) ──────────────────────────────────────────
+
+# Passwordless systemctl for wheel group
+# %wheel  ALL=(root)  NOPASSWD  /usr/bin/systemctl
+
+# netops group — raw network tools WITHOUT full root
+# Only gets cap_net_raw + cap_net_admin — nothing else
+# %netops  ALL=(root)  CAPS=cap_net_raw,cap_net_admin  NOPASSWD  /usr/sbin/tcpdump,/usr/bin/nmap
+
+# devops group — service management only
+# %devops  ALL=(root)  CAPS=cap_sys_admin  NOPASSWD  /usr/bin/systemctl,/usr/bin/journalctl
+
+# Single user, single command, no password
+# alice  ALL=(root)  NOPASSWD  /usr/bin/apt update

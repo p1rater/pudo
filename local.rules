@@ -1,0 +1,6 @@
+# /etc/pudo/rules.d/local.rules
+# Add your custom rules here.
+# This file is loaded AFTER 00-defaults.rules.
+#
+# Example — give p1rater full passwordless access:
+# p1rater  ALL=(ALL:ALL)  NOPASSWD  ALL
